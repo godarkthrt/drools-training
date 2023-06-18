@@ -75,6 +75,10 @@ public class Passport {
     this.cause = cause;
   }
 
+  public boolean unusedVisaPagesBetween(int xExclusive, int yExclusive) {
+    return this.unusedVisaPages > xExclusive && unusedVisaPages < yExclusive; 
+  }
+
   @Override
   public String toString() {
     return String.format("Passport[no:%s, name:%s]", passportNumber, name);

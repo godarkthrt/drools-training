@@ -4,11 +4,11 @@ import io.github.aasaru.drools.domain.Passport;
 import java.time.LocalDate;
 
 rule "Valid passport"
-  dialect "java"
+  dialect "mvel"
   when
-	Passport( !isExpired(), unusedVisaPages > 0 )
+	Passport( !isExpired(), $unsedPages : unusedVisaPages > 0, $name : name )
   then
-	System.out.println("This passport is CORRECT");
+	System.out.printf("This passport of %s is CORRECT, it has %d unused pages \n", $name , $unsedPages);
 end
 
 rule "Expired or full passport"
@@ -18,3 +18,12 @@ rule "Expired or full passport"
   then
 	System.out.println( "This passport is INVALID because it is expired or has no space for visa" );
 end
+
+
+rule "Valid passport but not many pages left"
+  dialect "mvel"
+  when
+  $passport : Passport( !isExpired() , unusedVisaPagesBetween(0,11))
+  then
+  System.out.printf("The passport of %s is VALID but has only %s pages left \n", $passport.name, $passport.unusedVisaPages)
+end 
